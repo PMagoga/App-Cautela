@@ -40,7 +40,7 @@ class App(ctk.CTk):
         btn_font = ctk.CTkFont(family='Helvitica', size=26, weight='bold')
         
         # botões dos menus principal
-        textos = ['Cautela', 'Devolução', 'Cadastro de Militar', 'Cadastro de Item']
+        textos = ['Cautelar', 'Devolução', 'Cadastro de Militar', 'Cadastro de Item']
         for texto in textos:        
             self.button = ctk.CTkButton(master=self.frame_esq,
                                             text=texto,
@@ -55,7 +55,7 @@ class App(ctk.CTk):
     # valor dos botões de todos os menus
     def valor_button(self, texto):
         texto_button = str({texto})
-        if texto_button == "{'Cautela'}":
+        if texto_button == "{'Cautelar'}":
             self.cautelar()
     
     
@@ -95,7 +95,7 @@ class App(ctk.CTk):
         font_opcoes = ctk.CTkFont(family='Helvetica')
         
         # imagem da tela principal de menus
-        self.minha_imagem = MeuFrame(master=self, width=900, height=600)
+        self.minha_imagem = MeuFrame(master=self, width=1000, height=600)
         self.minha_imagem.pack(side='left', padx=25, pady=25)
         
         # indicação do posto
@@ -105,7 +105,7 @@ class App(ctk.CTk):
                                         fg_color='#9ca69c',
                                         text_color='black',
                                         corner_radius=40)
-        self.image_label.grid(row=0, column=0, padx=15, pady=25)
+        self.image_label.grid(row=0, column=0, padx=10, pady=25)
         
         self.opcao_posto = ctk.CTkOptionMenu(master=self.minha_imagem,
                                              values=['Major', 'Capitão', '1° Tenente', '2° Tenente'],
@@ -119,21 +119,21 @@ class App(ctk.CTk):
                                         fg_color='#9ca69c',
                                         text_color='black',
                                         corner_radius=40)
-        self.label_nome.grid(row=0, column=2, padx=15, pady=25)
+        self.label_nome.grid(row=0, column=2, padx=10, pady=25)
         
         self.opcao_nome = ctk.CTkOptionMenu(master=self.minha_imagem,
                                              values=['Major', 'Capitão', '1° Tenente', '2° Tenente'],
                                              font=font_geral)
         self.opcao_nome.grid(row=0, column=3, padx=5, pady=5)
         
-        # indicação da ta
+        # label da indicação da data
         self.label_data = ctk.CTkLabel(master=self.minha_imagem, 
                                         text='Data', 
                                         font=font_geral,
                                         fg_color='#9ca69c',
                                         text_color='black',
                                         corner_radius=40)
-        self.label_data.grid(row=0, column=4, padx=15, pady=25)
+        self.label_data.grid(row=0, column=4, padx=10, pady=25)
         
         # verificação da data atual
         data_atual = date.today()
@@ -147,7 +147,25 @@ class App(ctk.CTk):
                                         corner_radius=40)
         self.label_data_hoje.grid(row=0, column=5, padx=5, pady=25)
         
-        
+        # label da indicação de observações necessárias
+        self.label_obs = ctk.CTkLabel(master=self.minha_imagem,
+                                      text= 'Observações',
+                                      font=font_geral,
+                                      fg_color='#9ca69c',
+                                      text_color='black',
+                                      corner_radius=40)
+        self.label_obs.grid(row=1, column=0, columnspan=2, padx=5, pady=25)
+               
+        self.label_entry = ctk.CTkTextbox(master=self.minha_imagem,
+                                      font=('Helvetica', 16),
+                                      fg_color='#9ca69c',
+                                      text_color='black',
+                                      corner_radius=10,
+                                      scrollbar_button_color='#051df5',
+                                      scrollbar_button_hover_color='red',
+                                      wrap='word',
+                                      width=450, height=100)
+        self.label_entry.grid(row=1, column=2, columnspan=4, padx=5, pady=25)        
         
         
         
