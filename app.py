@@ -70,6 +70,7 @@ class App(ctk.CTk):
         if t == 'HOME':
             self.apaga_tela()
             self.tela_inicial()
+            self.geometry('1100x600+350+50')
         
         elif t == 'Oficiais':
             self.cautela_of()                      
@@ -92,14 +93,22 @@ class App(ctk.CTk):
         
         # fonte
         font_geral = ctk.CTkFont(family='Helvetica', size=23, weight='bold')
-        font_opcoes = ctk.CTkFont(family='Helvetica')
-        
+        font_opcoes = ctk.CTkFont(family='Helvetica', size=16, weight='bold')
+                
         # imagem da tela principal de menus
-        self.minha_imagem = MeuFrame(master=self, width=1000, height=600)
+        self.minha_imagem = MeuFrame(master=self, width=1000, height=600, fg_color='#f7f6f2')
         self.minha_imagem.pack(side='left', padx=25, pady=25)
         
+        # frames da tela
+        self.frame_1 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color='#f7f6f2')
+        self.frame_1.pack(padx=15, pady=2)
+        self.frame_2 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color='#f7f6f2')
+        self.frame_2.pack(padx=15, pady=2)
+        self.frame_3 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color='#f7f6f2')
+        self.frame_3.pack(padx=15, pady=2)
+        
         # indicação do posto
-        self.image_label = ctk.CTkLabel(master=self.minha_imagem, 
+        self.image_label = ctk.CTkLabel(master=self.frame_1, 
                                         text='Posto', 
                                         font=font_geral,
                                         fg_color='#9ca69c',
@@ -107,13 +116,13 @@ class App(ctk.CTk):
                                         corner_radius=40)
         self.image_label.grid(row=0, column=0, padx=10, pady=25)
         
-        self.opcao_posto = ctk.CTkOptionMenu(master=self.minha_imagem,
+        self.opcao_posto = ctk.CTkOptionMenu(master=self.frame_1,
                                              values=['Major', 'Capitão', '1° Tenente', '2° Tenente'],
-                                             font=font_geral)
+                                             font=font_opcoes)
         self.opcao_posto.grid(row=0, column=1, padx=5, pady=5)
         
         # indicação do nome
-        self.label_nome = ctk.CTkLabel(master=self.minha_imagem, 
+        self.label_nome = ctk.CTkLabel(master=self.frame_1, 
                                         text='Nome', 
                                         font=font_geral,
                                         fg_color='#9ca69c',
@@ -121,13 +130,13 @@ class App(ctk.CTk):
                                         corner_radius=40)
         self.label_nome.grid(row=0, column=2, padx=10, pady=25)
         
-        self.opcao_nome = ctk.CTkOptionMenu(master=self.minha_imagem,
+        self.opcao_nome = ctk.CTkOptionMenu(master=self.frame_1,
                                              values=['Major', 'Capitão', '1° Tenente', '2° Tenente'],
-                                             font=font_geral)
+                                             font=font_opcoes)
         self.opcao_nome.grid(row=0, column=3, padx=5, pady=5)
         
         # label da indicação da data
-        self.label_data = ctk.CTkLabel(master=self.minha_imagem, 
+        self.label_data = ctk.CTkLabel(master=self.frame_1, 
                                         text='Data', 
                                         font=font_geral,
                                         fg_color='#9ca69c',
@@ -139,7 +148,7 @@ class App(ctk.CTk):
         data_atual = date.today()
         data_atual = f'{data_atual.day}/{data_atual.month}/{data_atual.year}'
         
-        self.label_data_hoje = ctk.CTkLabel(master=self.minha_imagem, 
+        self.label_data_hoje = ctk.CTkLabel(master=self.frame_1, 
                                         text = data_atual, 
                                         font = font_geral,
                                         fg_color='#9ca69c',
@@ -148,15 +157,15 @@ class App(ctk.CTk):
         self.label_data_hoje.grid(row=0, column=5, padx=5, pady=25)
         
         # label da indicação de observações necessárias
-        self.label_obs = ctk.CTkLabel(master=self.minha_imagem,
-                                      text= 'Observações',
+        self.label_obs = ctk.CTkLabel(master=self.frame_2,
+                                      text='Observações',
                                       font=font_geral,
                                       fg_color='#9ca69c',
                                       text_color='black',
                                       corner_radius=40)
-        self.label_obs.grid(row=1, column=0, columnspan=2, padx=5, pady=25)
+        self.label_obs.grid(row=0, column=0, columnspan=2, padx=5, pady=15)
                
-        self.label_entry = ctk.CTkTextbox(master=self.minha_imagem,
+        self.label_entry = ctk.CTkTextbox(master=self.frame_2,
                                       font=('Helvetica', 16),
                                       fg_color='#9ca69c',
                                       text_color='black',
@@ -165,8 +174,25 @@ class App(ctk.CTk):
                                       scrollbar_button_hover_color='red',
                                       wrap='word',
                                       width=450, height=100)
-        self.label_entry.grid(row=1, column=2, columnspan=4, padx=5, pady=25)        
+        self.label_entry.grid(row=0, column=2, columnspan=4, padx=5, pady=15)        
         
+        # indicação da senha
+        self.label_senha = ctk.CTkLabel(master=self.frame_3,
+                                      text= 'Senha',
+                                      font=font_geral,
+                                      fg_color='#9ca69c',
+                                      text_color='black',
+                                      corner_radius=40)
+        self.label_senha.grid(row=0, column=0, columnspan=2, padx=5, pady=25)
+               
+        self.entry_senha = ctk.CTkEntry(master=self.frame_3,
+                                      font=('Helvetica', 16),
+                                      fg_color='#9ca69c',
+                                      text_color='black',
+                                      corner_radius=10,
+                                      show='*',
+                                      width=200, height=20)
+        self.entry_senha.grid(row=0, column=3, padx=5, pady=25)
         
         
     def cautelar(self):
@@ -176,12 +202,13 @@ class App(ctk.CTk):
         
     def menu_cautelar(self):   
         
+        self.geometry('1100x400+350+50')
         # criação dos frames dos menus iniciais
-        self.frame_esq = MeuFrame(master=self, width=200, height=600, fg_color='#fcf2d7')
+        self.frame_esq = MeuFrame(master=self, width=200, height=400, fg_color='#fcf2d7')
         self.frame_esq.pack(side='left', padx=2, pady=25)
         
         # imagem da tela principal de menus
-        self.minha_imagem = MeuFrame(master=self, width=900, height=600)
+        self.minha_imagem = MeuFrame(master=self, width=900, height=400)
         self.minha_imagem.pack(side='left', padx=2, pady=2)
         
         self.image_label = ctk.CTkLabel(master=self.minha_imagem, text='')
