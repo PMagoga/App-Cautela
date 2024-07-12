@@ -7,6 +7,12 @@ from datetime import date
 # path para as imagens
 ROOT_PATH = Path(__file__).parent
 
+
+# cores do aplicativo
+frames_colors = '#e6e7be'
+labels_color = '#d3d4ac'
+buttons_color = '#c0c199'
+buttons_hover = '#adae87'
      
 class MeuFrame(ctk.CTkFrame):
     def __init__(self, master=None, **kwargs):
@@ -27,7 +33,7 @@ class App(ctk.CTk):
     # função para o início
     def tela_inicial(self):
         # criação dos frames dos menus iniciais
-        self.frame_esq = MeuFrame(master=self, width=200, height=600, fg_color='#fcf2d7')
+        self.frame_esq = MeuFrame(master=self, width=200, height=600, fg_color=frames_colors)
         self.frame_esq.pack(side='left', padx=2, pady=25)
         
         # imagem da tela principal de menus
@@ -48,7 +54,7 @@ class App(ctk.CTk):
                                             corner_radius=40,
                                             font=btn_font,
                                             text_color='black',
-                                            hover_color='#42ed5c',
+                                            hover_color=buttons_hover,
                                             command=lambda t=texto: self.valor_button(t))
             self.button.pack(padx=10, pady=10)                   
     
@@ -73,11 +79,14 @@ class App(ctk.CTk):
             self.geometry('1100x600+350+50')
         
         elif t == 'Oficiais':
-            self.cautela_of()                      
+            self.cautela_inicio()
+            self.cautela_of()
+            self.cautela_final()                      
             
         elif t == 'ST/Sgt':
-            self.apaga_tela()
-            self.menu_cautelar()
+            self.cautela_inicio()
+            self.cautela_st_sgt()
+            self.cautela_final() 
             
         elif t == 'Cb/Sd EP':
             self.apaga_tela()
@@ -86,60 +95,33 @@ class App(ctk.CTk):
         else:
             self.apaga_tela()
             self.menu_cautelar()
-            
-    def cautela_of(self):
+       
+    def cautela_inicio(self):
         self.apaga_tela()        
-        self.menu_cautelar()
-        
-        # fonte
-        font_geral = ctk.CTkFont(family='Helvetica', size=23, weight='bold')
-        font_opcoes = ctk.CTkFont(family='Helvetica', size=16, weight='bold')
-                
+        self.menu_cautelar()        
+                        
         # imagem da tela principal de menus
-        self.minha_imagem = MeuFrame(master=self, width=1000, height=600, fg_color='#f7f6f2')
+        self.minha_imagem = MeuFrame(master=self, width=1000, height=600, fg_color=frames_colors)
         self.minha_imagem.pack(side='left', padx=25, pady=25)
         
         # frames da tela
-        self.frame_1 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color='#f7f6f2')
+        self.frame_1 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color='red')
         self.frame_1.pack(padx=15, pady=2)
-        self.frame_2 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color='#f7f6f2')
+        self.frame_2 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color='red')
         self.frame_2.pack(padx=15, pady=2)
-        self.frame_3 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color='#f7f6f2')
+        self.frame_3 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color='red')
         self.frame_3.pack(padx=15, pady=2)
         
-        # indicação do posto
-        self.image_label = ctk.CTkLabel(master=self.frame_1, 
-                                        text='Posto', 
-                                        font=font_geral,
-                                        fg_color='#9ca69c',
-                                        text_color='black',
-                                        corner_radius=40)
-        self.image_label.grid(row=0, column=0, padx=10, pady=25)
-        
-        self.opcao_posto = ctk.CTkOptionMenu(master=self.frame_1,
-                                             values=['Major', 'Capitão', '1° Tenente', '2° Tenente'],
-                                             font=font_opcoes)
-        self.opcao_posto.grid(row=0, column=1, padx=5, pady=5)
-        
-        # indicação do nome
-        self.label_nome = ctk.CTkLabel(master=self.frame_1, 
-                                        text='Nome', 
-                                        font=font_geral,
-                                        fg_color='#9ca69c',
-                                        text_color='black',
-                                        corner_radius=40)
-        self.label_nome.grid(row=0, column=2, padx=10, pady=25)
-        
-        self.opcao_nome = ctk.CTkOptionMenu(master=self.frame_1,
-                                             values=['Major', 'Capitão', '1° Tenente', '2° Tenente'],
-                                             font=font_opcoes)
-        self.opcao_nome.grid(row=0, column=3, padx=5, pady=5)
+    def cautela_final(self):
+        # fonte
+        font_geral = ctk.CTkFont(family='Helvetica', size=23, weight='bold')
+        font_opcoes = ctk.CTkFont(family='Helvetica', size=16, weight='bold')
         
         # label da indicação da data
         self.label_data = ctk.CTkLabel(master=self.frame_1, 
                                         text='Data', 
                                         font=font_geral,
-                                        fg_color='#9ca69c',
+                                        fg_color=labels_color,
                                         text_color='black',
                                         corner_radius=40)
         self.label_data.grid(row=0, column=4, padx=10, pady=25)
@@ -151,7 +133,7 @@ class App(ctk.CTk):
         self.label_data_hoje = ctk.CTkLabel(master=self.frame_1, 
                                         text = data_atual, 
                                         font = font_geral,
-                                        fg_color='#9ca69c',
+                                        fg_color=labels_color,
                                         text_color='black',
                                         corner_radius=40)
         self.label_data_hoje.grid(row=0, column=5, padx=5, pady=25)
@@ -160,7 +142,7 @@ class App(ctk.CTk):
         self.label_obs = ctk.CTkLabel(master=self.frame_2,
                                       text='Observações',
                                       font=font_geral,
-                                      fg_color='#9ca69c',
+                                      fg_color=labels_color,
                                       text_color='black',
                                       corner_radius=40)
         self.label_obs.grid(row=0, column=0, columnspan=2, padx=5, pady=15)
@@ -180,7 +162,7 @@ class App(ctk.CTk):
         self.label_senha = ctk.CTkLabel(master=self.frame_3,
                                       text= 'Senha',
                                       font=font_geral,
-                                      fg_color='#9ca69c',
+                                      fg_color=labels_color,
                                       text_color='black',
                                       corner_radius=40)
         self.label_senha.grid(row=0, column=0, columnspan=2, padx=5, pady=25)
@@ -193,6 +175,76 @@ class App(ctk.CTk):
                                       show='*',
                                       width=200, height=20)
         self.entry_senha.grid(row=0, column=3, padx=5, pady=25)
+             
+    def cautela_of(self):
+        # fonte
+        font_geral = ctk.CTkFont(family='Helvetica', size=23, weight='bold')
+        font_opcoes = ctk.CTkFont(family='Helvetica', size=16, weight='bold')       
+                
+        # indicação do posto
+        self.image_label = ctk.CTkLabel(master=self.frame_1, 
+                                        text='Posto', 
+                                        font=font_geral,
+                                        fg_color=labels_color,
+                                        text_color='black',
+                                        corner_radius=40)
+        self.image_label.grid(row=0, column=0, padx=10, pady=25)
+        
+        self.opcao_posto = ctk.CTkOptionMenu(master=self.frame_1,
+                                             values=['Major', 'Capitão', '1° Tenente', '2° Tenente'],
+                                             font=font_opcoes,
+                                             text_color='Black')
+        self.opcao_posto.grid(row=0, column=1, padx=5, pady=5)
+        
+        # indicação do nome
+        self.label_nome = ctk.CTkLabel(master=self.frame_1, 
+                                        text='Nome', 
+                                        font=font_geral,
+                                        fg_color=labels_color,
+                                        text_color='black',
+                                        corner_radius=40)
+        self.label_nome.grid(row=0, column=2, padx=10, pady=25)
+        
+        self.opcao_nome = ctk.CTkOptionMenu(master=self.frame_1,
+                                             values=['Major', 'Capitão', '1° Tenente', '2° Tenente'],
+                                             font=font_opcoes,
+                                             text_color='black')
+        self.opcao_nome.grid(row=0, column=3, padx=5, pady=5)
+        
+    def cautela_st_sgt(self):
+        # fonte
+        font_geral = ctk.CTkFont(family='Helvetica', size=23, weight='bold')
+        font_opcoes = ctk.CTkFont(family='Helvetica', size=16, weight='bold')       
+                
+        # indicação do posto
+        self.image_label = ctk.CTkLabel(master=self.frame_1, 
+                                        text='Grad', 
+                                        font=font_geral,
+                                        fg_color=labels_color,
+                                        text_color='black',
+                                        corner_radius=40)
+        self.image_label.grid(row=0, column=0, padx=10, pady=25)
+        
+        self.opcao_posto = ctk.CTkOptionMenu(master=self.frame_1,
+                                             values=['ST', '1º Sgt', '2º Sgt', '3º Sgt'],
+                                             font=font_opcoes,
+                                             text_color='Black')
+        self.opcao_posto.grid(row=0, column=1, padx=5, pady=5)
+        
+        # indicação do nome
+        self.label_nome = ctk.CTkLabel(master=self.frame_1, 
+                                        text='Nome', 
+                                        font=font_geral,
+                                        fg_color=labels_color,
+                                        text_color='black',
+                                        corner_radius=40)
+        self.label_nome.grid(row=0, column=2, padx=10, pady=25)
+        
+        self.opcao_nome = ctk.CTkOptionMenu(master=self.frame_1,
+                                             values=['Major', 'Capitão', '1° Tenente', '2° Tenente'],
+                                             font=font_opcoes,
+                                             text_color='black')
+        self.opcao_nome.grid(row=0, column=3, padx=5, pady=5)
         
         
     def cautelar(self):
@@ -204,7 +256,7 @@ class App(ctk.CTk):
         
         self.geometry('1100x400+350+50')
         # criação dos frames dos menus iniciais
-        self.frame_esq = MeuFrame(master=self, width=200, height=400, fg_color='#fcf2d7')
+        self.frame_esq = MeuFrame(master=self, width=200, height=400, fg_color=frames_colors)
         self.frame_esq.pack(side='left', padx=2, pady=25)
         
         # imagem da tela principal de menus
