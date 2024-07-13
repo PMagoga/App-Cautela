@@ -7,20 +7,18 @@ from datetime import date
 # path para as imagens
 ROOT_PATH = Path(__file__).parent
 
-
 # cores do aplicativo
-frames_colors = '#e6e7be'
-labels_color = '#d3d4ac'
+frames_colors = '#dbf78d'
+labels_color = '#898a86'
 buttons_color = '#c0c199'
 buttons_hover = '#adae87'
      
 class MeuFrame(ctk.CTkFrame):
     def __init__(self, master=None, **kwargs):
-        super().__init__(master, **kwargs)             
-   
+        super().__init__(master, **kwargs)       
 
-class App(ctk.CTk):
-    
+            
+class App(ctk.CTk):    
     
     def __init__(self):
         super().__init__()
@@ -63,15 +61,15 @@ class App(ctk.CTk):
         texto_button = str({texto})
         if texto_button == "{'Cautelar'}":
             self.cautelar()
-    
-    
+        elif texto_button == "{'Cadastro de Militar'}":
+            self.cadastro()
+      
     # função para apagar todos os frames existentes e limpar a tela    
     def apaga_tela(self):
         self.frame_esq.pack_forget()
-        self.image_label.pack_forget()
-        self.minha_imagem.pack_forget()
-        
+        self.minha_imagem.pack_forget()        
     
+    # botões da tela inicial pressionados
     def botoes_cautela_pressed(self, t):
         if t == 'HOME':
             self.apaga_tela()
@@ -79,39 +77,22 @@ class App(ctk.CTk):
             self.geometry('1100x600+350+50')
         
         elif t == 'Oficiais':
-            self.cautela_inicio()
             self.cautela_of()
             self.cautela_final()                      
             
         elif t == 'ST/Sgt':
-            self.cautela_inicio()
             self.cautela_st_sgt()
             self.cautela_final() 
             
         elif t == 'Cb/Sd EP':
-            self.apaga_tela()
-            self.menu_cautelar()
+            self.cautela_cb_sd()
+            self.cautela_final()
             
         else:
-            self.apaga_tela()
-            self.menu_cautelar()
-       
-    def cautela_inicio(self):
-        self.apaga_tela()        
-        self.menu_cautelar()        
-                        
-        # imagem da tela principal de menus
-        self.minha_imagem = MeuFrame(master=self, width=1000, height=600, fg_color=frames_colors)
-        self.minha_imagem.pack(side='left', padx=25, pady=25)
-        
-        # frames da tela
-        self.frame_1 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color='red')
-        self.frame_1.pack(padx=15, pady=2)
-        self.frame_2 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color='red')
-        self.frame_2.pack(padx=15, pady=2)
-        self.frame_3 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color='red')
-        self.frame_3.pack(padx=15, pady=2)
-        
+            self.cautela_ev()
+            self.cautela_final()
+    
+    # frames da cautela comuns a todos
     def cautela_final(self):
         # fonte
         font_geral = ctk.CTkFont(family='Helvetica', size=23, weight='bold')
@@ -175,7 +156,8 @@ class App(ctk.CTk):
                                       show='*',
                                       width=200, height=20)
         self.entry_senha.grid(row=0, column=3, padx=5, pady=25)
-             
+    
+    # somente oficiais     
     def cautela_of(self):
         # fonte
         font_geral = ctk.CTkFont(family='Helvetica', size=23, weight='bold')
@@ -210,7 +192,8 @@ class App(ctk.CTk):
                                              font=font_opcoes,
                                              text_color='black')
         self.opcao_nome.grid(row=0, column=3, padx=5, pady=5)
-        
+    
+    # somente st/sgt
     def cautela_st_sgt(self):
         # fonte
         font_geral = ctk.CTkFont(family='Helvetica', size=23, weight='bold')
@@ -245,29 +228,90 @@ class App(ctk.CTk):
                                              font=font_opcoes,
                                              text_color='black')
         self.opcao_nome.grid(row=0, column=3, padx=5, pady=5)
+    
+    # somente cb/sd        
+    def cautela_cb_sd(self):
+        # fonte
+        font_geral = ctk.CTkFont(family='Helvetica', size=23, weight='bold')
+        font_opcoes = ctk.CTkFont(family='Helvetica', size=16, weight='bold')       
+                
+        # indicação do posto
+        self.image_label = ctk.CTkLabel(master=self.frame_1, 
+                                        text='Grad', 
+                                        font=font_geral,
+                                        fg_color=labels_color,
+                                        text_color='black',
+                                        corner_radius=40)
+        self.image_label.grid(row=0, column=0, padx=10, pady=25)
         
+        self.opcao_posto = ctk.CTkOptionMenu(master=self.frame_1,
+                                             values=['Cb', 'Sd'],
+                                             font=font_opcoes,
+                                             text_color='Black')
+        self.opcao_posto.grid(row=0, column=1, padx=5, pady=5)
         
+        # indicação do nome
+        self.label_nome = ctk.CTkLabel(master=self.frame_1, 
+                                        text='Nome', 
+                                        font=font_geral,
+                                        fg_color=labels_color,
+                                        text_color='black',
+                                        corner_radius=40)
+        self.label_nome.grid(row=0, column=2, padx=10, pady=25)
+        
+        self.opcao_nome = ctk.CTkOptionMenu(master=self.frame_1,
+                                             values=['Major', 'Capitão', '1° Tenente', '2° Tenente'],
+                                             font=font_opcoes,
+                                             text_color='black')
+        self.opcao_nome.grid(row=0, column=3, padx=5, pady=5)
+    
+    # somente soldados efetivos variável    
+    def cautela_ev(self):
+        # fonte
+        font_geral = ctk.CTkFont(family='Helvetica', size=23, weight='bold')
+        font_opcoes = ctk.CTkFont(family='Helvetica', size=16, weight='bold')       
+                
+        # indicação do posto
+        self.image_label = ctk.CTkLabel(master=self.frame_1, 
+                                        text='Sd EV Nr', 
+                                        font=font_geral,
+                                        fg_color=labels_color,
+                                        text_color='black',
+                                        corner_radius=40)
+        self.image_label.grid(row=0, column=0, padx=10, pady=25)
+        
+        self.opcao_posto = ctk.CTkOptionMenu(master=self.frame_1,
+                                             values=['Nr'],
+                                             font=font_opcoes,
+                                             text_color='Black')
+        self.opcao_posto.grid(row=0, column=1, padx=5, pady=5)
+        
+        # indicação do nome
+        self.label_nome = ctk.CTkLabel(master=self.frame_1, 
+                                        text='Nome', 
+                                        font=font_geral,
+                                        fg_color=labels_color,
+                                        text_color='black',
+                                        corner_radius=40)
+        self.label_nome.grid(row=0, column=2, padx=10, pady=25)
+        
+        self.opcao_nome = ctk.CTkOptionMenu(master=self.frame_1,
+                                             values=['Major', 'Capitão', '1° Tenente', '2° Tenente'],
+                                             font=font_opcoes,
+                                             text_color='black')
+        self.opcao_nome.grid(row=0, column=3, padx=5, pady=5)
+    
+    # caso botão cautela seja pressionado    
     def cautelar(self):
         self.frame_esq.pack_forget()
         self.image_label.pack_forget()
-        self.menu_cautelar()
-        
-    def menu_cautelar(self):   
-        
         self.geometry('1100x400+350+50')
         # criação dos frames dos menus iniciais
         self.frame_esq = MeuFrame(master=self, width=200, height=400, fg_color=frames_colors)
         self.frame_esq.pack(side='left', padx=2, pady=25)
         
-        # imagem da tela principal de menus
-        self.minha_imagem = MeuFrame(master=self, width=900, height=400)
-        self.minha_imagem.pack(side='left', padx=2, pady=2)
-        
-        self.image_label = ctk.CTkLabel(master=self.minha_imagem, text='')
-        self.image_label.pack(side='left', padx=1, pady=1)
-        
         # fonte dos botões
-        btn_font = ctk.CTkFont(family='Helvitica', size=26, weight='bold')
+        btn_font = ctk.CTkFont(family='Helvetica', size=26, weight='bold')
         
         # botões
         textos = ['HOME', 'Oficiais', 'ST/Sgt', 'Cb/Sd EP', 'Sd EV']
@@ -280,10 +324,42 @@ class App(ctk.CTk):
                                             text_color='black',
                                             hover_color='#42ed5c',
                                             command=lambda t=texto: self.botoes_cautela_pressed(t))
-            self.button.pack(padx=10, pady=10)
-           
+            self.button.pack(padx=10, pady=10)      
         
-    
+        # imagem da tela principal de menus
+        self.minha_imagem = MeuFrame(master=self, width=1000, height=600, fg_color=frames_colors)
+        self.minha_imagem.pack(side='left', padx=25, pady=25)
+        
+        # frames da tela
+        self.frame_1 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color=frames_colors)
+        self.frame_1.pack(padx=15, pady=2)
+        self.frame_2 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color=frames_colors)
+        self.frame_2.pack(padx=15, pady=2)
+        self.frame_3 = MeuFrame(master=self.minha_imagem, width=1000, height=200, fg_color=frames_colors)
+        self.frame_3.pack(padx=15, pady=2)
+        
+    # cadastro de militares
+    def cadastro(self):
+        self.frame_esq.pack_forget()
+        self.image_label.pack_forget()
+        self.geometry('1100x400+350+50')
+        
+        # criação dos frames dos menus iniciais
+        self.frame_esq = MeuFrame(master=self, width=200, height=400, fg_color=frames_colors)
+        self.frame_esq.pack(side='left', padx=2, pady=25)
+        
+        # fonte dos botões
+        btn_font = ctk.CTkFont(family='Helvetica', size=26, weight='bold')
+        
+        self.botao_voltar = ctk.CTkButton(master=self.frame_esq,
+                                     text='Voltar',
+                                     width=45, height=45,
+                                     corner_radius=40,
+                                     font=btn_font,
+                                     text_color='black',
+                                     hover_color=buttons_hover)
+        self.botao_voltar.pack(padx=15, pady=15)
+        
 if __name__=="__main__":
     app = App()
     app.mainloop()
