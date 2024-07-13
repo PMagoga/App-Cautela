@@ -62,7 +62,9 @@ class App(ctk.CTk):
         if texto_button == "{'Cautelar'}":
             self.cautelar()
         elif texto_button == "{'Cadastro de Militar'}":
-            self.cadastro()
+            self.cadastro_militar()
+        elif texto_button == "{'Cadastro de Item'}":
+            self.cadastro_item()
       
     # função para apagar todos os frames existentes e limpar a tela    
     def apaga_tela(self):
@@ -339,26 +341,155 @@ class App(ctk.CTk):
         self.frame_3.pack(padx=15, pady=2)
         
     # cadastro de militares
-    def cadastro(self):
+    def cadastro_militar(self):
         self.frame_esq.pack_forget()
         self.image_label.pack_forget()
         self.geometry('1100x400+350+50')
         
-        # criação dos frames dos menus iniciais
-        self.frame_esq = MeuFrame(master=self, width=200, height=400, fg_color=frames_colors)
-        self.frame_esq.pack(side='left', padx=2, pady=25)
+        def voltar():
+            self.frame.pack_forget()
+            self.tela_inicial()
+            self.geometry('1100x600+350+50')
+        # fonte
+        font_geral = ctk.CTkFont(family='Helvetica', size=23, weight='bold')
+        font_opcoes = ctk.CTkFont(family='Helvetica', size=16, weight='bold')
         
+        # criação dos frames
+        self.frame = MeuFrame(master=self, width=1100, height=400, fg_color=frames_colors)
+        self.frame.pack(side='left', padx=90, pady=2)
+        
+        # indicação do posto
+        self.indica_posto_grad = ctk.CTkLabel(master=self.frame, 
+                                        text='Posto/Grad', 
+                                        font=font_geral,
+                                        fg_color=labels_color,
+                                        text_color='black',
+                                        corner_radius=40)
+        self.indica_posto_grad.grid(row=0, column=0, padx=10, pady=25)
+        
+        self.opcao_posto_grad = ctk.CTkOptionMenu(master=self.frame,
+                                             values=['Major', 'Capitão', '1° Tenente', '2° Tenente', 'Subtenente',
+                                                     '1º Sgt', '2º Sgt', '3º Sgt', 'Cb', 'Sd EP', 'Sd EV'],
+                                             font=font_opcoes,
+                                             text_color='Black')
+        self.opcao_posto_grad.grid(row=0, column=1, padx=5, pady=5)
+        
+        self.nome = ctk.CTkLabel(master=self.frame,
+                                 text='Nome/Nr',
+                                 font=font_geral,
+                                 fg_color=labels_color,
+                                 text_color='black',
+                                 corner_radius=30)
+        self.nome.grid(row=0, column=2, padx=10, pady=25)
+        
+        self.entry_nome = ctk.CTkEntry(master=self.frame,
+                                       width=400, height=15,
+                                       corner_radius=30,
+                                       fg_color=labels_color,
+                                       placeholder_text='Nome',
+                                       placeholder_text_color='red',
+                                       font=font_geral)
+        self.entry_nome.grid(row=0, column=3)       
+               
         # fonte dos botões
         btn_font = ctk.CTkFont(family='Helvetica', size=26, weight='bold')
         
-        self.botao_voltar = ctk.CTkButton(master=self.frame_esq,
+        self.botao_voltar = ctk.CTkButton(master=self.frame,
                                      text='Voltar',
                                      width=45, height=45,
                                      corner_radius=40,
                                      font=btn_font,
                                      text_color='black',
+                                     hover_color=buttons_hover,
+                                     command=voltar)
+        self.botao_voltar.grid(row=1, column=1, padx=15, pady=15)
+        
+        self.botao_cadastrar = ctk.CTkButton(master=self.frame,
+                                     text='Cadastrar',
+                                     width=45, height=45,
+                                     corner_radius=40,
+                                     font=btn_font,
+                                     text_color='black',
                                      hover_color=buttons_hover)
-        self.botao_voltar.pack(padx=15, pady=15)
+        self.botao_cadastrar.grid(row=1, column=3, padx=15, pady=15)
+        
+        
+    # cadastro de item
+    def cadastro_item(self):
+        self.frame_esq.pack_forget()
+        self.image_label.pack_forget()
+        self.geometry('1100x400+350+50')
+        
+        def voltar():
+            self.frame.pack_forget()
+            self.tela_inicial()
+            self.geometry('1100x600+350+50')
+        # fonte
+        font_geral = ctk.CTkFont(family='Helvetica', size=23, weight='bold')
+        font_opcoes = ctk.CTkFont(family='Helvetica', size=16, weight='bold')
+        
+        # criação dos frames
+        self.frame = MeuFrame(master=self, width=1100, height=400, fg_color=frames_colors)
+        self.frame.pack(side='left', padx=40, pady=2)
+        
+        # indicação do item
+        self.indica_item = ctk.CTkLabel(master=self.frame, 
+                                        text='Item', 
+                                        font=font_geral,
+                                        fg_color=labels_color,
+                                        text_color='black',
+                                        corner_radius=40)
+        self.indica_item.grid(row=0, column=0, padx=10, pady=25)
+        
+        self.entry_nome = ctk.CTkEntry(master=self.frame,
+                                       width=300, height=15,
+                                       corner_radius=30,
+                                       fg_color=labels_color,
+                                       placeholder_text='Item',
+                                       placeholder_text_color='red',
+                                       font=font_geral)
+        self.entry_nome.grid(row=0, column=1, columnspan=2, padx=5, pady=25)
+              
+        # indicação descrição
+        self.indica_posto_grad = ctk.CTkLabel(master=self.frame, 
+                                        text='Descrição', 
+                                        font=font_geral,
+                                        fg_color=labels_color,
+                                        text_color='black',
+                                        corner_radius=40)
+        self.indica_posto_grad.grid(row=0, column=3, padx=2, pady=25)
+        
+        self.entry_nome = ctk.CTkTextbox(master=self.frame,
+                                       width=400, height=150,
+                                       corner_radius=20,
+                                       fg_color=labels_color,
+                                       font=('Helvetica', 16),
+                                       wrap='word',
+                                       scrollbar_button_color='#051df5',
+                                      scrollbar_button_hover_color='red')
+        self.entry_nome.grid(row=0, column=4, columnspan=4, padx=2, pady=15, ipady=1)       
+               
+        # fonte dos botões
+        btn_font = ctk.CTkFont(family='Helvetica', size=26, weight='bold')
+        
+        self.botao_voltar = ctk.CTkButton(master=self.frame,
+                                     text='Voltar',
+                                     width=45, height=45,
+                                     corner_radius=40,
+                                     font=btn_font,
+                                     text_color='black',
+                                     hover_color=buttons_hover,
+                                     command=voltar)
+        self.botao_voltar.grid(row=1, column=2, padx=15, pady=15)
+        
+        self.botao_cadastrar = ctk.CTkButton(master=self.frame,
+                                     text='Cadastrar',
+                                     width=45, height=45,
+                                     corner_radius=40,
+                                     font=btn_font,
+                                     text_color='black',
+                                     hover_color=buttons_hover)
+        self.botao_cadastrar.grid(row=1, column=4, padx=5, pady=15)
         
 if __name__=="__main__":
     app = App()
