@@ -1,7 +1,9 @@
+from tkinter import messagebox
 import customtkinter as ctk
 from PIL import Image
 from pathlib import Path
 from datetime import date
+import sqlite3
 
 
 # path para as imagens
@@ -12,7 +14,30 @@ frames_colors = '#dbf78d'
 labels_color = '#898a86'
 buttons_color = '#c0c199'
 buttons_hover = '#adae87'
-     
+
+
+class Conexao:
+    def __init__(self):
+        # conectando ao banco de dados caso não exista
+        self.conn = sqlite3.connect('cautela_subtenencia.db')
+
+    def tabela_itens(self):
+        cursor = self.conn.cursor()
+        cursor.execute('CREATE TABLE IF NOT EXISTS itens(\
+                            id INT PRIMARY KEY NOT NULL,\
+                            nome_item TEXT NOT NULL,\
+                            descricao TEXT NOT NULL)')
+        cursor.commit()
+
+    def cadastra_item(self, item, descricao):
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute('''INSERT INTO itens VALUES(?, ?)''', (item, descricao))
+            messagebox.showinfo('Cadastro Item', 'Item cadastrado com sucesso')
+        finally:
+            messagebox.showinfo('Cadastro Item', 'Item não cadastrado')
+
+
 class MeuFrame(ctk.CTkFrame):
     def __init__(self, master=None, **kwargs):
         super().__init__(master, **kwargs)       
@@ -413,13 +438,14 @@ class App(ctk.CTk):
                                      hover_color=buttons_hover)
         self.botao_cadastrar.grid(row=1, column=3, padx=15, pady=15)
         
-        
     # cadastro de item
     def cadastro_item(self):
+
         self.frame_esq.pack_forget()
         self.image_label.pack_forget()
         self.geometry('1100x400+350+50')
-        
+
+
         def voltar():
             self.frame.pack_forget()
             self.tela_inicial()
@@ -451,24 +477,25 @@ class App(ctk.CTk):
         self.entry_nome.grid(row=0, column=1, columnspan=2, padx=5, pady=25)
               
         # indicação descrição
-        self.indica_posto_grad = ctk.CTkLabel(master=self.frame, 
+        self.label_descricao = ctk.CTkLabel(master=self.frame,
                                         text='Descrição', 
                                         font=font_geral,
                                         fg_color=labels_color,
                                         text_color='black',
                                         corner_radius=40)
-        self.indica_posto_grad.grid(row=0, column=3, padx=2, pady=25)
+        self.label_descricao.grid(row=0, column=3, padx=2, pady=25)
         
-        self.entry_nome = ctk.CTkTextbox(master=self.frame,
+        self.entry_descricao = ctk.CTkTextbox(master=self.frame,
                                        width=400, height=150,
                                        corner_radius=20,
                                        fg_color=labels_color,
                                        font=('Helvetica', 16),
                                        wrap='word',
                                        scrollbar_button_color='#051df5',
-                                      scrollbar_button_hover_color='red')
-        self.entry_nome.grid(row=0, column=4, columnspan=4, padx=2, pady=15, ipady=1)       
-               
+                                       scrollbar_button_hover_color='red')
+        self.entry_descricao.grid(row=0, column=4, columnspan=4, padx=2, pady=15, ipady=1)
+
+
         # fonte dos botões
         btn_font = ctk.CTkFont(family='Helvetica', size=26, weight='bold')
         
@@ -488,9 +515,19 @@ class App(ctk.CTk):
                                      corner_radius=40,
                                      font=btn_font,
                                      text_color='black',
-                                     hover_color=buttons_hover)
+                                     hover_color=buttons_hover,
+                                     command=self.cadastrar_item)
         self.botao_cadastrar.grid(row=1, column=4, padx=5, pady=15)
-        
+
+    def cadastrar_item(self):
+        nome_item = self.entry_nome.get()
+        descricao_item = self.entry_descricao.get()
+        cadastrar = Conexao()
+        cadastrar.tabela_itens()
+
+        cadastrar.cadastra_item(nome_item, descricao_item)
+
+
 if __name__=="__main__":
     app = App()
     app.mainloop()
