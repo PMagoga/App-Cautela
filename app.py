@@ -24,17 +24,18 @@ class Conexao:
     def tabela_itens(self):
         cursor = self.conn.cursor()
         cursor.execute('CREATE TABLE IF NOT EXISTS itens(\
-                            id INT PRIMARY KEY NOT NULL,\
+                            id INTEGER PRIMARY KEY,\
                             nome_item TEXT NOT NULL,\
                             descricao TEXT NOT NULL)')
-        cursor.commit()
+        self.conn.commit()
 
     def cadastra_item(self, item, descricao):
         cursor = self.conn.cursor()
         try:
-            cursor.execute('''INSERT INTO itens VALUES(?, ?)''', (item, descricao))
+            cursor.execute('''INSERT INTO itens(nome_item, descricao) VALUES(?, ?)''', (item, descricao))
+            self.conn.commit()
             messagebox.showinfo('Cadastro Item', 'Item cadastrado com sucesso')
-        finally:
+        except:
             messagebox.showinfo('Cadastro Item', 'Item não cadastrado')
 
 
@@ -521,10 +522,11 @@ class App(ctk.CTk):
 
     def cadastrar_item(self):
         nome_item = self.entry_nome.get()
-        descricao_item = self.entry_descricao.get()
+        descricao_item = self.entry_descricao.get(0.0, 'end')
+        print(nome_item)
+        print(descricao_item)
         cadastrar = Conexao()
         cadastrar.tabela_itens()
-
         cadastrar.cadastra_item(nome_item, descricao_item)
 
 
